@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  mongo-latest:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    volumes:
+      - cyno-test:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+volumes:
+  cyno-test:
+    driver: local
