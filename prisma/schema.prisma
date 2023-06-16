@@ -1,8 +1,8 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-//WHEN UPDATING MODEL FOR MONGO USE: npx prisma generate
-//TO LOOK AT SCHEMA USE: npx prisma studio
+// WHEN UPDATING MODEL FOR MONGO USE: npx prisma generate
+// TO LOOK AT SCHEMA USE: npx prisma studio
 
 generator client {
   provider = "prisma-client-js"
@@ -19,17 +19,9 @@ model User {
   updatedAt      DateTime @updatedAt
   email          String   @unique
   hashedPassword String
-  name           String
-  Owner          Owner[]
-}
+  name           String?
+  dogs           Dog[]
 
-model Owner {
-  id            Int              @id @default(autoincrement())
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-  user          User             @relation(fields: [userId], references: [id])
-  userId        Int
-  breedingHouse Breeding_House[]
 }
 
 model Dog {
@@ -37,37 +29,9 @@ model Dog {
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
   name            String
-  breed           String
-  championship    Championship[]
-  Breed           Breed[]
-  breedingHouse   Breeding_House @relation(fields: [breedingHouseId], references: [id])
-  breedingHouseId Int
+
+  userId          Int
+  user            User          @relation(fields: [userId], references: [id])
+
 }
 
-model Championship {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String
-  dog       Dog      @relation(fields: [dogId], references: [id])
-  dogId     Int
-}
-
-model Breeding_House {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String
-  dog       Dog[]
-  Owner     Owner?   @relation(fields: [ownerId], references: [id])
-  ownerId   Int?
-}
-
-model Breed {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String
-  dog       Dog      @relation(fields: [dogId], references: [id])
-  dogId     Int
-}
