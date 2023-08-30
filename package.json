@@ -11,13 +11,11 @@
     "db:dev:volume-remove": "docker volume rm ",
     "prisma:dev:deploy": "npx prisma migrate deploy",
     "db:dev:restart": "yarn db:dev:rm && yarn db:dev:up && @powershell sleep 5 && @powershell Write-Host \"Hello\" && yarn prisma:dev:deploy",
-
     "db:test:rm": "docker compose rm test-db -s -f -v",
     "db:test:up": "docker compose up test-db -d",
     "db:test:volume-remove": "docker volume rm ",
     "prisma:test:deploy": "dotenv -e .env.test -- npx prisma migrate deploy",
     "db:test:restart": "yarn db:test:rm && yarn db:test:up && @powershell sleep 5 && @powershell Write-Host \"Hello\" && yarn prisma:test:deploy",
-
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -65,6 +63,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^29.5.0",
+    "pactum": "^3.5.0",
     "prettier": "^2.3.2",
     "source-map-support": "^0.5.20",
     "supertest": "^6.1.3",
