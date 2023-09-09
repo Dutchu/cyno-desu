@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  dev-db:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    networks:
+      - competence-project-network
+    volumes:
+        - ./docker-data/db:/var/lib/postgresql/data
+    ports:
+      - ${DB_PORT}:5432
+  test-db:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    networks:
+      - competence-project-network
+    volumes:
+      - ./docker-data/db:/var/lib/postgresql/data
+    ports:
+      - 5435:5432
+networks:
+    competence-project-network:

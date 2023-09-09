@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// WHEN UPDATING MODEL FOR MONGO USE: npx prisma generate
+// TO LOOK AT SCHEMA USE: npx prisma studio
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  email          String   @unique
+  hashedPassword String
+  name           String?
+  dogs           Dog[]
+
+}
+
+model Dog {
+  id              Int            @id @default(autoincrement())
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  name            String
+
+  userId          Int
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+}
