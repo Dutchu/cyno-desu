@@ -19,9 +19,10 @@ model User {
   updatedAt      DateTime @updatedAt
   email          String   @unique
   hashedPassword String
-  name           String?
-  dogs           Dog[]
-
+  firstName      String?
+  lastName       String?
+  //User can have multiple families
+  families       Family[]
 }
 
 model Dog {
@@ -29,8 +30,77 @@ model Dog {
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
   name            String
+  //Dog has unique breed
+  breed Breed?
+  //A dog is a part of one family
+  familyId        Int
+  family          Family          @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  //Dog can have multiple champion titles from fiffrent organizations
+  dogChampion DogChampion[]
 
+}
+
+model Champion {
+  id              Int            @id @default(autoincrement())
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  name            String
+  //Specific champion title can have multiple events with multiple dogs winnig
+  dogChampion DogChampion[]
+
+}
+
+model DogChampion {
+  id              Int           @id @default(autoincrement())
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  name            String
+  //Many championats can have diffrent dogs winners
+  championId        Int
+  champion          Champion          @relation(fields: [championId], references: [id], onDelete: Cascade)
+  //Many dogs can have same specific champion title
+  dogId        Int
+  dog          Dog          @relation(fields: [dogId], references: [id], onDelete: Cascade)
+
+  // Create a one-to-one relation with Event
+  event           Event?
+
+  // Create a unique constraint for the event relation
+  @@unique([id])
+}
+
+model Event {
+  id              Int            @id @default(autoincrement())
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  name            String
+
+  //Event details for DogChampion where dogs many dogs can have many champion titles
+  dogChampionId Int @unique
+  dogChampion       DogChampion          @relation(fields: [dogChampionId], references: [id], onDelete: Cascade)
+}
+
+model Family {
+  id              Int            @id @default(autoincrement())
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  name            String
+
+  //Family has many dogs
+  dogs Dog[]
+
+  //Family is owned by single user
   userId          Int
   user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
 
+model Breed {
+  id              Int            @id @default(autoincrement())
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  name            String
+
+  //Breed is unique to a dog one-to-one
+  dogId Int @unique
+  dog            Dog          @relation(fields: [dogId], references: [id], onDelete: Cascade)
 }
