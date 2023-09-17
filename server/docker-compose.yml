@@ -10,7 +10,7 @@ services:
     networks:
       - competence-project-network
     volumes:
-        - ./docker-data/db:/var/lib/postgresql/data
+        - ./docker-data/dev-db:/var/lib/postgresql/data
     ports:
       - ${DB_PORT}:5432
   test-db:
@@ -23,8 +23,21 @@ services:
     networks:
       - competence-project-network
     volumes:
-      - ./docker-data/db:/var/lib/postgresql/data
+      - ./docker-data/test-db:/var/lib/postgresql/data
     ports:
       - 5435:5432
+  shadow-db:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${SHADOW_NAME}
+    networks:
+      - competence-project-network
+    volumes:
+      - ./docker-data/shadow-db:/var/lib/postgresql/data
+    ports:
+      - ${SHADOW_DB_PORT}:5432
 networks:
     competence-project-network:
